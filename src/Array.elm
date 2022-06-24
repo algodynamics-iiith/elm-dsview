@@ -49,6 +49,7 @@ type ArrayLayout =
         width : Float 
         , height : Float
         , coordDict : Dict Int DU.Coordinates   
+        , arrayGraph : G.Graph Int ()
     }
 
 type alias DrawConfig n msg =
@@ -90,24 +91,24 @@ runArrayLayout config array =
         g = arraytoGraph array config.wrapVal
         {width, height, coordict, _ } = D.runLayout 
     in
-    { width, height, coordict }
-
+    { width, height, coordict, g }
 
 
 draw : List (Attribute (DagreConfig)) -> List (Attribute (DrawConfig n msg)) -> Array a -> Html msg
 draw edits1 edits2 array =
     let
-        { width, height, coordDict } =
+        editD = layoutDagreAttr edits1
+        { width, height, coordDict, arrGraph } =
             runArrayLayout edits1 array
 
         dagreConfig =
-            List.foldl (\f a -> f a) D.defaultConfig edits1
+            List.foldl (\f a -> f a) D.defaultConfig editsD
 
         drawConfig =
             List.foldl (\f a -> f a) defDrawConfig edits2
 
         nodesSvg =
-            TS.g [ TA.class [ "nodes" ] ] <| List.map (\n -> elementDrawing n drawConfig.nodeDrawer coordDict dagreConfig) <| Array.toList <| array
+            TS.g [ TA.class [ "nodes" ] ] <| List.map (\n -> nodeDrawing n drawConfig.nodeDrawer coordDict dagreConfig) <| arrGraph
     in
     TS.svg
         [ TA.viewBox 0 0 width height
