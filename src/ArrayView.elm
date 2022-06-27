@@ -130,16 +130,18 @@ type alias ArrayLayout n =
     }
 
 
-type alias DrawConfig n msg =
-    { nodeDrawer : NodeDrawer n msg
+type alias DrawConfig n e msg =
+    { edgeDrawer : EdgeDrawer e msg
+    , nodeDrawer : NodeDrawer n msg
     , style : String
     , id : String
     }
 
 
-defDrawConfig : DrawConfig n msg
+defDrawConfig : DrawConfig n e msg
 defDrawConfig =
-    { nodeDrawer = RSD.svgDrawNode []
+    { edgeDrawer = RSD.svgDrawEdge []
+    , nodeDrawer = RSD.svgDrawNode []
     , style = ""
     , id = "array-0"
     }
@@ -198,7 +200,7 @@ nodeDrawing node_ drawNode_ coordDict config =
     drawNode_ (NodeAttributes node_ pos w h)
 
 
-draw : List (Attribute LayoutConfig) -> List (Attribute (R.DrawConfig n msg)) -> Array n -> Html msg
+draw : List (Attribute LayoutConfig) -> List (Attribute (DrawConfig n e msg)) -> Array n -> Html msg
 draw edits1 edits2 array =
     let
         { width, height, coordDict, arrayGraph, dagreAttr } =
