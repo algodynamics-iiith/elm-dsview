@@ -6,7 +6,6 @@ import Dagre.Attributes as DA
 import Dict exposing (Dict)
 import Graph as G exposing (Node)
 import Html exposing (..)
-import Render as R
 import Render.StandardDrawers as RSD
 import Render.StandardDrawers.Attributes exposing (Attribute)
 import Render.Types exposing (..)
@@ -40,8 +39,8 @@ defLayoutConfig =
     , heightDict = Dict.empty
     , width = 60
     , height = 60
-    , marginX = 0
-    , marginY = 0
+    , marginX = 50
+    , marginY = 50
     , elemDistX = 50
     , elemDistY = 50
     , direction = DA.TB
@@ -122,11 +121,11 @@ layoutDagreAttr arrayConfig =
     )
 
 
-type alias ArrayLayout =
+type alias ArrayLayout n =
     { width : Float
     , height : Float
     , coordDict : Dict Int ( Float, Float )
-    , arrayGraph : G.Graph Int ()
+    , arrayGraph : G.Graph n ()
     , dagreAttr : List DA.Attribute
     }
 
@@ -146,7 +145,7 @@ defDrawConfig =
     }
 
 
-arrayToGraph : Array Int -> Maybe Int -> G.Graph Int ()
+arrayToGraph : Array a -> Maybe Int -> G.Graph a ()
 arrayToGraph arr wv =
     G.fromNodeLabelsAndEdgePairs
         (Array.toList arr)
@@ -155,8 +154,8 @@ arrayToGraph arr wv =
             |> List.filter
                 (\( _, y ) ->
                     case wv of
-                        Just n ->
-                            remainderBy n y /= 0
+                        Just num ->
+                            remainderBy num y /= 0
 
                         Nothing ->
                             True
@@ -164,7 +163,7 @@ arrayToGraph arr wv =
         )
 
 
-runArrayLayout : List (Attribute LayoutConfig) -> Array Int -> ArrayLayout
+runArrayLayout : List (Attribute LayoutConfig) -> Array n -> ArrayLayout n
 runArrayLayout attr array =
     let
         ( attrDagre, wrapVal ) =
@@ -199,7 +198,7 @@ nodeDrawing node_ drawNode_ coordDict config =
     drawNode_ (NodeAttributes node_ pos w h)
 
 
-draw : List (Attribute LayoutConfig) -> List (Attribute (DrawConfig n msg)) -> Array Int -> Html msg
+draw : List (Attribute LayoutConfig) -> List (Attribute (R.DrawConfig n msg)) -> Array n -> Html msg
 draw edits1 edits2 array =
     let
         { width, height, coordDict, arrayGraph, dagreAttr } =
@@ -215,7 +214,7 @@ draw edits1 edits2 array =
             G.nodes arrayGraph
 
         nodesSvg =
-            TS.g [ TA.class [ "nodes" ] ] <| List.map (\n -> nodeDrawing n drawConfig.nodeDrawer coordDict dagreConfig) <| nodeLst
+            TS.g [ TA.class [ "nodes" ] ] <| List.map (\n -> nodeDrawing n drawConfig.nodeDrawer coordDict dagreConfig) nodeLst
     in
     TS.svg
         [ TA.viewBox 0 0 width height
