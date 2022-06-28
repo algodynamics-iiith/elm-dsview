@@ -1,5 +1,26 @@
 module ArrayView exposing (draw)
 
+{-| This module provides an array renderer which can be used in the following ways:
+
+    You can directly use existing drawers or you can write your own drawers.
+
+# API
+
+@docs draw
+
+
+# Drawers
+
+This type represents a function that translates element/Node Attributes
+to Svg.
+
+
+# Configuration Attributes
+
+@docs id, style
+
+-}
+
 import Array exposing (Array)
 import Dagre as D
 import Dagre.Attributes as DA
@@ -72,7 +93,7 @@ layoutDagreAttr arrayConfig =
     , attr.wrapVal
     )
 
-
+{- This type defines array layout -}
 type alias ArrayLayout n =
     { width : Float
     , height : Float
@@ -81,7 +102,7 @@ type alias ArrayLayout n =
     , dagreAttr : List DA.Attribute
     }
 
-
+{- This gives default draw configuration for the nodes -}
 defDrawConfig : DrawConfig n e msg
 defDrawConfig =
     { edgeDrawer = RSD.svgDrawEdge []
@@ -90,6 +111,16 @@ defDrawConfig =
     , id = "array-0"
     }
 
+{-| This function converts Array into a Graph, by treating elements as nodes and adds an edge
+between two consecutive nodes and breaks it when chain length reaches wrap value.
+
+It takes two arguments
+    Array - Input array
+    Wrapvalue - Number of elements per row
+
+and returns a graph.
+
+-}
 
 arrayToGraph : Array a -> Maybe Int -> G.Graph a ()
 arrayToGraph arr wv =
@@ -108,7 +139,15 @@ arrayToGraph arr wv =
                 )
         )
 
+{-| This function computes the layout for the elements of array using runLayout API exposed
+by elm-dagre.
 
+This function takes list of LayoutConfig attributes and an array and outputs the ArrayLayout
+
+    runArrayLayout [] arr
+
+
+-}
 runArrayLayout : List (Attribute LayoutConfig) -> Array n -> ArrayLayout n
 runArrayLayout attr array =
     let
@@ -128,7 +167,7 @@ runArrayLayout attr array =
     , dagreAttr = attrDagre
     }
 
-
+{- This calculates the configuration for individual nodes using layout attributes and returns svg -}
 nodeDrawing : Node n -> NodeDrawer n msg -> Dict.Dict G.NodeId ( Float, Float ) -> DA.Config -> TC.Svg msg
 nodeDrawing node_ drawNode_ coordDict config =
     let
@@ -143,7 +182,15 @@ nodeDrawing node_ drawNode_ coordDict config =
     in
     drawNode_ (NodeAttributes node_ pos w h)
 
+{-| This function draws the Array as SVG using the elm-dagre library.
+It takes List of LayoutConfig attributes as the first argument, and drawers/styles as
+the second attribute and the Array as the third. The standard drawers are
+used as the default drawers.
 
+Example
+    draw [] [] arr
+
+-}
 draw : List (Attribute LayoutConfig) -> List (Attribute (DrawConfig n e msg)) -> Array n -> Html msg
 draw edits1 edits2 array =
     let
