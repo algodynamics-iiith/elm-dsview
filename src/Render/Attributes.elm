@@ -1,11 +1,11 @@
-module Render.Attributes exposing (..)
+module Render.Attributes exposing (Shape(..), label, onClick, strokeColor, strokeWidth, strokeDashArray, style, title, shape, fill, xLabel, xLabelPos, elemDrawer, svgDrawNode, DrawConfig)
 
 import Color exposing (Color)
 import Graph exposing (Node)
 import Render as R
 import Render.StandardDrawers as RSD
 import Render.StandardDrawers.Attributes exposing (Attribute)
-import Render.StandardDrawers.Types exposing (..)
+import Render.StandardDrawers.Types as RSDT exposing (..)
 import Render.Types exposing (..)
 import TypedSvg.Core exposing (Svg)
 
@@ -20,7 +20,7 @@ type alias DrawConfig n e msg =
 
 type alias NodeDrawerConfig n msg =
     { label : Node n -> String
-    , shape : Shape
+    , shape : RSDT.Shape
     , onClick : Maybe (Node n -> msg)
     , strokeColor : Node n -> Color
     , strokeWidth : Node n -> Float
@@ -31,6 +31,30 @@ type alias NodeDrawerConfig n msg =
     , xLabel : Node n -> String
     , xLabelPos : Node n -> Float -> Float -> ( Float, Float )
     }
+
+type Shape
+    = Circle
+    | Ellipse
+    | Box
+    | RoundedBox Float
+
+
+
+shapeConvert : Shape -> RSDT.Shape
+shapeConvert dir =
+    case dir of
+        Circle ->
+            RSDT.Circle
+
+        RoundedBox n ->
+            RSDT.RoundedBox n
+
+        Box ->
+            RSDT.Box
+        
+        Ellipse ->
+            RSDT.Ellipse
+
 
 
 {-| The following attribute can be used to set label on both Nodes and Edges.
@@ -99,7 +123,7 @@ The possible values are None, Triangle, Vee.
 shape : Shape -> Attribute (NodeDrawerConfig n msg)
 shape s =
     \ndc ->
-        { ndc | shape = s }
+        { ndc | shape = (shapeConvert s) }
 
 
 {-| To add fill color to Node
