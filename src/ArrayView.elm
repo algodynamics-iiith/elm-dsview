@@ -1,12 +1,13 @@
 module ArrayView exposing (draw)
 
 import Array exposing (Array)
-import Attributes as A exposing (LayoutConfig, DrawConfig)
 import Dagre as D
 import Dagre.Attributes as DA
 import Dict exposing (Dict)
 import Graph as G exposing (Node)
 import Html exposing (Html)
+import Layout.Attributes as A exposing (LayoutConfig)
+import Render.Attributes exposing (DrawConfig)
 import Render.StandardDrawers as RSD
 import Render.StandardDrawers.Attributes exposing (Attribute)
 import Render.Types exposing (..)
@@ -79,9 +80,6 @@ type alias ArrayLayout n =
     , arrayGraph : G.Graph n ()
     , dagreAttr : List DA.Attribute
     }
-
-
-
 
 
 defDrawConfig : DrawConfig n e msg

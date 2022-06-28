@@ -2,9 +2,10 @@ module Main exposing (..)
 
 import Array
 import ArrayView as AV
-import Attributes as A exposing (Direction(..), direction, elemDrawer, heightDict, svgDrawNode, width, widthDict)
 import Dict
 import Html exposing (Html)
+import Layout.Attributes exposing (Direction(..), direction, heightDict, width, widthDict)
+import Render.Attributes as A exposing (elemDrawer, svgDrawNode)
 
 
 main : Html msg
