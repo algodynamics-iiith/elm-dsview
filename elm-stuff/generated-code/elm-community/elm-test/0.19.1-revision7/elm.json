@@ -8,6 +8,7 @@
     "elm-version": "0.19.1",
     "dependencies": {
         "direct": {
+            "avh4/elm-color": "1.0.0",
             "elm/browser": "1.0.2",
             "elm/core": "1.0.5",
             "elm/html": "1.0.0",
@@ -19,7 +20,6 @@
             "goyalarchit/elm-dagre": "2.0.0"
         },
         "indirect": {
-            "avh4/elm-color": "1.0.0",
             "avh4/elm-fifo": "1.0.4",
             "elm/parser": "1.1.0",
             "elm/svg": "1.0.1",

@@ -1,36 +1,18 @@
-module ArrayView exposing (..)
+module ArrayView exposing (draw)
 
-import Array exposing (..)
+import Array exposing (Array)
+import Attributes as A exposing (LayoutConfig, DrawConfig)
 import Dagre as D
 import Dagre.Attributes as DA
 import Dict exposing (Dict)
 import Graph as G exposing (Node)
-import Html exposing (..)
+import Html exposing (Html)
 import Render.StandardDrawers as RSD
 import Render.StandardDrawers.Attributes exposing (Attribute)
 import Render.Types exposing (..)
 import TypedSvg as TS
 import TypedSvg.Attributes as TA
 import TypedSvg.Core as TC
-import TypedSvg.Types exposing (YesNo(..))
-
-
-type alias Direction =
-    DA.RankDir
-
-
-type alias LayoutConfig =
-    { widthDict : Dict Int Float
-    , heightDict : Dict Int Float
-    , width : Float
-    , height : Float
-    , marginX : Float
-    , marginY : Float
-    , elemDistX : Float
-    , elemDistY : Float
-    , direction : Direction
-    , wrapVal : Maybe Int
-    }
 
 
 defLayoutConfig : LayoutConfig
@@ -43,59 +25,25 @@ defLayoutConfig =
     , marginY = 50
     , elemDistX = 50
     , elemDistY = 50
-    , direction = DA.TB
+    , direction = A.LR
     , wrapVal = Nothing
     }
 
 
-widthDictAttr : Dict Int Float -> Attribute { b | widthDict : Dict Int Float }
-widthDictAttr wdict =
-    \rec -> { rec | widthDict = wdict }
+directionToRankDir : A.Direction -> DA.RankDir
+directionToRankDir dir =
+    case dir of
+        A.TB ->
+            DA.TB
 
+        A.BT ->
+            DA.BT
 
-heightDictAttr : Dict Int Float -> Attribute { b | heightDict : Dict Int Float }
-heightDictAttr hdict =
-    \rec -> { rec | heightDict = hdict }
+        A.LR ->
+            DA.LR
 
-
-widthAttr : Float -> Attribute { b | width : Float }
-widthAttr w =
-    \rec -> { rec | width = w }
-
-
-heightAttr : Float -> Attribute { b | height : Float }
-heightAttr h =
-    \rec -> { rec | height = h }
-
-
-marginXAttr : Float -> Attribute { b | marginX : Float }
-marginXAttr mX =
-    \rec -> { rec | marginX = mX }
-
-
-marginYAttr : Float -> Attribute { b | marginY : Float }
-marginYAttr mY =
-    \rec -> { rec | marginY = mY }
-
-
-elemDistXAttr : Float -> Attribute { b | elemDistX : Float }
-elemDistXAttr dx =
-    \rec -> { rec | elemDistX = dx }
-
-
-elemDistYAttr : Float -> Attribute { b | elemDistY : Float }
-elemDistYAttr dy =
-    \rec -> { rec | elemDistY = dy }
-
-
-directionAttr : Direction -> Attribute { b | direction : Direction }
-directionAttr dir =
-    \rec -> { rec | direction = dir }
-
-
-wrapValAttr : Maybe Int -> Attribute { b | wrapVal : Maybe Int }
-wrapValAttr wv =
-    \rec -> { rec | wrapVal = wv }
+        A.RL ->
+            DA.RL
 
 
 layoutDagreAttr : List (Attribute LayoutConfig) -> ( List DA.Attribute, Maybe Int )
@@ -106,6 +54,9 @@ layoutDagreAttr arrayConfig =
                 (\f a -> f a)
                 defLayoutConfig
                 arrayConfig
+
+        rank =
+            directionToRankDir attr.direction
     in
     ( [ DA.widthDict <| attr.widthDict
       , DA.heightDict <| attr.heightDict
@@ -115,7 +66,7 @@ layoutDagreAttr arrayConfig =
       , DA.marginY <| attr.marginY
       , DA.rankSep <| attr.elemDistX
       , DA.nodeSep <| attr.elemDistY
-      , DA.rankDir <| attr.direction
+      , DA.rankDir <| rank
       ]
     , attr.wrapVal
     )
@@ -130,12 +81,7 @@ type alias ArrayLayout n =
     }
 
 
-type alias DrawConfig n e msg =
-    { edgeDrawer : EdgeDrawer e msg
-    , nodeDrawer : NodeDrawer n msg
-    , style : String
-    , id : String
-    }
+
 
 
 defDrawConfig : DrawConfig n e msg
@@ -168,11 +114,11 @@ arrayToGraph arr wv =
 runArrayLayout : List (Attribute LayoutConfig) -> Array n -> ArrayLayout n
 runArrayLayout attr array =
     let
-        ( attrDagre, wrapVal ) =
+        ( attrDagre, wrapval ) =
             layoutDagreAttr attr
 
         g =
-            arrayToGraph array wrapVal
+            arrayToGraph array wrapval
 
         graphLayout =
             D.runLayout attrDagre g
