@@ -1,21 +1,15 @@
-module Attributes exposing (LayoutConfig, direction, elemDistX, elemDistY, height, heightDict, marginX, marginY, width, widthDict, wrapVal)
+module Attributes exposing (Direction(..), LayoutConfig, direction, elemDistX, elemDistY, height, heightDict, marginX, marginY, width, widthDict, wrapVal)
 
-import Array exposing (Array)
-import Dagre as D
-import Dagre.Attributes as DA
 import Dict exposing (Dict)
-import Graph as G exposing (Node)
-import Html exposing (Html)
-import Render.StandardDrawers as RSD
 import Render.StandardDrawers.Attributes exposing (Attribute)
 import Render.Types exposing (..)
-import TypedSvg as TS
-import TypedSvg.Attributes as TA
-import TypedSvg.Core as TC
 
 
-type alias Direction =
-    DA.RankDir
+type Direction
+    = TB
+    | BT
+    | LR
+    | RL
 
 
 type alias LayoutConfig =

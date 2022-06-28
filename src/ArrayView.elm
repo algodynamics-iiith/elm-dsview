@@ -1,7 +1,7 @@
 module ArrayView exposing (draw)
 
 import Array exposing (Array)
-import Attributes exposing (LayoutConfig)
+import Attributes as A exposing (LayoutConfig)
 import Dagre as D
 import Dagre.Attributes as DA
 import Dict exposing (Dict)
@@ -25,9 +25,25 @@ defLayoutConfig =
     , marginY = 50
     , elemDistX = 50
     , elemDistY = 50
-    , direction = DA.TB
+    , direction = A.LR
     , wrapVal = Nothing
     }
+
+
+directionToRankDir : A.Direction -> DA.RankDir
+directionToRankDir dir =
+    case dir of
+        A.TB ->
+            DA.TB
+
+        A.BT ->
+            DA.BT
+
+        A.LR ->
+            DA.LR
+
+        A.RL ->
+            DA.RL
 
 
 layoutDagreAttr : List (Attribute LayoutConfig) -> ( List DA.Attribute, Maybe Int )
@@ -38,6 +54,9 @@ layoutDagreAttr arrayConfig =
                 (\f a -> f a)
                 defLayoutConfig
                 arrayConfig
+
+        rank =
+            directionToRankDir attr.direction
     in
     ( [ DA.widthDict <| attr.widthDict
       , DA.heightDict <| attr.heightDict
@@ -47,7 +66,7 @@ layoutDagreAttr arrayConfig =
       , DA.marginY <| attr.marginY
       , DA.rankSep <| attr.elemDistX
       , DA.nodeSep <| attr.elemDistY
-      , DA.rankDir <| attr.direction
+      , DA.rankDir <| rank
       ]
     , attr.wrapVal
     )

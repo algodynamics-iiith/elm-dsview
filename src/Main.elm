@@ -2,8 +2,7 @@ module Main exposing (..)
 
 import Array
 import ArrayView as AV
-import Attributes exposing (direction, heightDict, width, widthDict)
-import Dagre.Attributes exposing (RankDir(..))
+import Attributes exposing (Direction(..), direction, heightDict, width, widthDict)
 import Dict
 import Html exposing (Html)
 import Render as R
@@ -23,7 +22,7 @@ main =
             (RSD.svgDrawNode
                 [ RSDA.label (\n -> String.fromInt n.label)
                 , RSDA.xLabel (\n -> String.fromInt n.id)
-                , RSDA.xLabelPos (\n _ _ -> ( 0, 65 ))
+                , RSDA.xLabelPos (\_ _ _ -> ( 0, 65 ))
                 ]
             )
         ]
