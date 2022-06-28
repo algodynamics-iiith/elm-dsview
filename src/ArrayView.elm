@@ -1,7 +1,7 @@
 module ArrayView exposing (draw)
 
 import Array exposing (Array)
-import Attributes as A exposing (LayoutConfig)
+import Attributes as A exposing (LayoutConfig, DrawConfig)
 import Dagre as D
 import Dagre.Attributes as DA
 import Dict exposing (Dict)
@@ -81,12 +81,7 @@ type alias ArrayLayout n =
     }
 
 
-type alias DrawConfig n e msg =
-    { edgeDrawer : EdgeDrawer e msg
-    , nodeDrawer : NodeDrawer n msg
-    , style : String
-    , id : String
-    }
+
 
 
 defDrawConfig : DrawConfig n e msg
