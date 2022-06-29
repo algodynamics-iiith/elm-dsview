@@ -1,7 +1,11 @@
 {
-    "type": "application",
-    "source-directories": [
-        "src"
+    "type": "package",
+    "name" : "abcd/efgh",
+    "summary" : "Visualization of array in Elm",
+    "license" : "BSD-3-Clause",
+    "version" : "1.0.0",
+    "exposed-modules" : [
+        "ArrayView"
     ],
     "elm-version": "0.19.1",
     "dependencies": {
