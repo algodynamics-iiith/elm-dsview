@@ -144,34 +144,36 @@ shape s =
         { ndc | shape = (shapeConvert s) }
 
 
-{-| To add fill color to Node
--}
+{-| To add fill color to Node -}
 fill : (a -> Color) -> Attribute { c | fill : a -> Color }
 fill f =
     \ndc ->
         { ndc | fill = f }
 
 
-{-| Set the Extra Label for a node.
--}
+{-| Set the Extra Label for a node. -}
 xLabel : (Node n -> String) -> Attribute (NodeDrawerConfig n msg)
 xLabel f =
     \ndc ->
         { ndc | xLabel = f }
 
+<<<<<<< HEAD
 {-| Set the position of xLabel of a node
 -}
+=======
+{-| Set the position of index labels of each node -}
+>>>>>>> main
 xLabelPos : (Node n -> Float -> Float -> ( Float, Float )) -> Attribute (NodeDrawerConfig n msg)
 xLabelPos f =
     \ndc ->
         { ndc | xLabelPos = f }
 
-
+{-| Used to draw the array elements with given configurations -}
 elemDrawer : NodeDrawer n msg -> DrawConfig n e msg -> DrawConfig n e msg
 elemDrawer =
     R.nodeDrawer
 
-
+{-| Used to generate SVG for each individual array element -}
 svgDrawNode : List (Attribute (NodeDrawerConfig n msg)) -> NodeAttributes n -> Svg msg
 svgDrawNode =
     RSD.svgDrawNode
