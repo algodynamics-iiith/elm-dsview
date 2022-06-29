@@ -157,12 +157,8 @@ xLabel f =
     \ndc ->
         { ndc | xLabel = f }
 
-<<<<<<< HEAD
 {-| Set the position of xLabel of a node
 -}
-=======
-{-| Set the position of index labels of each node -}
->>>>>>> main
 xLabelPos : (Node n -> Float -> Float -> ( Float, Float )) -> Attribute (NodeDrawerConfig n msg)
 xLabelPos f =
     \ndc ->
