@@ -6,8 +6,6 @@ There are two attribute modules with which the user can configure the rendered o
 - Layout - Attributes which make an impact on the layout of the rendered array.
 - Render - Attributes which affect the configuration of the array containers, it doesn't change the layout in any way. 
 
-!!TODO!! [A live example]() for the array visualization.
-
 Example code utilizing this package can be viewed in the `\examples` folder.
 
 ## Objectives
@@ -37,15 +35,15 @@ main =
 		]
 		(Array.fromList [ 0, 1, 2, -1, 5 ])
 ```
-Output :
+## Output
 ![Array visualization](examples/view-output.jpeg)
 
 ## Future Work
 
--  Add more datastructures like
-    - stacks
-    - queues
-    - lists
+-  Add visualizations for more datastructures like
+    - Stacks
+    - Queues
+    - Lists
 
 ## Attribution
 This package is essentially an extension of [elm-dagre](https://package.elm-lang.org/packages/goyalarchit/elm-dagre/latest/). Many thanks to the contributors of the package.
