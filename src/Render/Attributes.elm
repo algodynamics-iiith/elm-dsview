@@ -6,7 +6,7 @@ and elemDrawer
 
 # Type
 
-@docs DrawConfig, NodeDrawerConfig, Shape
+@docs Shape, elemDrawer, svgDrawNode, DrawConfig
 
 
 
@@ -27,7 +27,7 @@ import Render.StandardDrawers.Types as RSDT exposing (..)
 import Render.Types exposing (..)
 import TypedSvg.Core exposing (Svg)
 
-
+{-| Configuration for array drawer -}
 type alias DrawConfig n e msg =
     { edgeDrawer : EdgeDrawer e msg
     , nodeDrawer : NodeDrawer n msg
@@ -50,6 +50,7 @@ type alias NodeDrawerConfig n msg =
     , xLabelPos : Node n -> Float -> Float -> ( Float, Float )
     }
 
+{-| Used to configure the shape of array container -}
 type Shape
     = Circle
     | Ellipse

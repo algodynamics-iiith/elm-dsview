@@ -36,7 +36,7 @@ main =
 		(Array.fromList [ 0, 1, 2, -1, 5 ])
 ```
 ## Output
-![Array visualization](examples/view-output.jpeg)
+![Please see Source](examples/view-output.jpeg)
 
 ## Future Work
 

@@ -1,12 +1,6 @@
-module ArrayView exposing (draw)
+module ArrayView exposing (draw, runArrayLayout, ArrayLayout)
 
-{-| This module provides an array renderer which can be used in the following ways:
-
-    You can directly use existing drawers or you can write your own drawers.
-
-# API
-
-@docs draw
+{-| This module is utilized to render the visualization of the array.
 
 
 # Drawers
@@ -17,7 +11,7 @@ to Svg.
 
 # Configuration Attributes
 
-@docs id, style
+@docs draw, runArrayLayout, ArrayLayout
 
 -}
 
@@ -93,12 +87,11 @@ layoutDagreAttr arrayConfig =
     , attr.wrapVal
     )
 
-{- This type defines array layout -}
-type alias ArrayLayout n =
+{-| This type defines array layout -}
+type alias ArrayLayout =
     { width : Float
     , height : Float
     , coordDict : Dict Int ( Float, Float )
-    , arrayGraph : G.Graph n ()
     , dagreAttr : List DA.Attribute
     }
 
@@ -146,9 +139,8 @@ This function takes list of LayoutConfig attributes and an array and outputs the
 
     runArrayLayout [] arr
 
-
 -}
-runArrayLayout : List (Attribute LayoutConfig) -> Array n -> ArrayLayout n
+runArrayLayout : List (Attribute LayoutConfig) -> Array n -> ArrayLayout
 runArrayLayout attr array =
     let
         ( attrDagre, wrapval ) =
@@ -163,7 +155,6 @@ runArrayLayout attr array =
     { width = graphLayout.width
     , height = graphLayout.height
     , coordDict = graphLayout.coordDict
-    , arrayGraph = g
     , dagreAttr = attrDagre
     }
 
@@ -187,14 +178,14 @@ It takes List of LayoutConfig attributes as the first argument, and drawers/styl
 the second attribute and the Array as the third. The standard drawers are
 used as the default drawers.
 
-Example
+    -- The simplest example of its usage is
     draw [] [] arr
 
 -}
 draw : List (Attribute LayoutConfig) -> List (Attribute (DrawConfig n e msg)) -> Array n -> Html msg
 draw edits1 edits2 array =
     let
-        { width, height, coordDict, arrayGraph, dagreAttr } =
+        { width, height, coordDict, dagreAttr } =
             runArrayLayout edits1 array
 
         dagreConfig =
@@ -203,8 +194,11 @@ draw edits1 edits2 array =
         drawConfig =
             List.foldl (\f a -> f a) defDrawConfig edits2
 
+        layoutConfig = 
+            List.foldl (\f a -> f a) defLayoutConfig edits1
+
         nodeLst =
-            G.nodes arrayGraph
+            G.nodes <| arrayToGraph array layoutConfig.wrapVal
 
         nodesSvg =
             TS.g [ TA.class [ "nodes" ] ] <| List.map (\n -> nodeDrawing n drawConfig.nodeDrawer coordDict dagreConfig) nodeLst
