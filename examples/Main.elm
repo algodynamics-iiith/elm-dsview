@@ -7,6 +7,7 @@ import Html exposing (Html)
 import Layout.Attributes exposing (Direction(..), direction, heightDict, width, widthDict)
 import Render.Attributes as A exposing (elemDrawer, svgDrawNode)
 import Render.StandardDrawers.Types exposing (Shape)
+import Color
 
 
 
@@ -23,7 +24,11 @@ main =
                 [ A.label (\n -> String.fromInt n.label)
                 , A.xLabel (\n -> String.fromInt n.id)
                 , A.xLabelPos (\_ _ _ -> ( 0, 65 ))
-                , A.shape A.Box
+                {- , A.shape A.Box
+                , A.fill (\_ -> Color.rgb 255 255 255)
+                , A.strokeColor (\_ -> Color.rgb 0 0 0)
+                , A.strokeDashArray (\_ -> "hi")
+                , A.xLabelPos (\_ _ _-> (0, 40)) -}
                 ]
             )
         ]

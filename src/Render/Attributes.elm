@@ -1,5 +1,23 @@
 module Render.Attributes exposing (Shape(..), label, onClick, strokeColor, strokeWidth, strokeDashArray, style, title, shape, fill, xLabel, xLabelPos, elemDrawer, svgDrawNode, DrawConfig)
 
+{-| This module provides attributes for configuring draw, svgDrawNode
+and elemDrawer
+
+
+# Type
+
+@docs DrawConfig, NodeDrawerConfig, Shape
+
+
+
+# elemDrawer Attributes
+
+@docs label, onClick, strokeColor, strokeWidth, strokeDashArray, style,
+title, shape, fill, xLabel, xLabelPos
+
+-}
+
+
 import Color exposing (Color)
 import Graph exposing (Node)
 import Render as R
@@ -141,7 +159,8 @@ xLabel f =
     \ndc ->
         { ndc | xLabel = f }
 
-
+{-| Set the position of xLabel of a node
+-}
 xLabelPos : (Node n -> Float -> Float -> ( Float, Float )) -> Attribute (NodeDrawerConfig n msg)
 xLabelPos f =
     \ndc ->
