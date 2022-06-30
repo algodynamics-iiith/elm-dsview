@@ -45,6 +45,8 @@ main =
     - Queues
     - Lists
 
+- Add an attribute which allows the user to add multiple indices, for now the `xlabel` attribute is utilized to do the same, which only adds one label to the visualization. 
+
 ## Attribution
 This package is essentially an extension of [elm-dagre](https://package.elm-lang.org/packages/goyalarchit/elm-dagre/latest/). Many thanks to the contributors of the package.
 
