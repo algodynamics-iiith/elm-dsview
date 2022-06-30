@@ -1,6 +1,6 @@
 {
     "type": "package",
-    "name" : "algodynamics-iiith/elm-array-view",
+    "name" : "algodynamics-iiith/elm-dsview",
     "summary" : "Visualization of array in Elm",
     "license" : "BSD-3-Clause",
     "version" : "1.0.0",
